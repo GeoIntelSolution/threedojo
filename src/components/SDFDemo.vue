@@ -5,13 +5,16 @@
 <script>
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-let scene, camera, renderer, controls;
+import {Text} from 'troika-three-text';
+let scene, camera, renderer, controls,plane,myText;
 export default {
     name: 'sdf_demo',
     mounted() {
         this.init();
-        this.animate();
         this.addControl(camera, renderer)
+        this.addText()
+        this.animate();
+
     },
     methods: {
         init() {
@@ -26,22 +29,22 @@ export default {
 
             const geometry = new THREE.BoxGeometry(10, 10, 10)
             const mesh = new THREE.Mesh(geometry, new THREE.ShaderMaterial({
-                uniforms:{
-                    opacity:{
-                        value:0.5
+                uniforms: {
+                    opacity: {
+                        value: 0.5
                     },
-                    uCityColor:{
-                        value:new THREE.Color('#5588aa')
+                    uCityColor: {
+                        value: new THREE.Color('#5588aa')
                     }
                 },
-                vertexShader:`
+                vertexShader: `
                 varying vec3 vPosition;
                 void main()
                 {
                   vPosition = position;
                   gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
                 }`,
-                fragmentShader:`
+                fragmentShader: `
                 varying vec3 vPosition;
                 uniform float opacity;
                 uniform vec3 uCityColor;
@@ -59,8 +62,17 @@ export default {
 
             const light = new THREE.AmbientLight(0x404040); // soft white light
             scene.add(light);
-            scene.add(mesh)
+            // scene.add(mesh)
             this.addOutline(mesh)
+
+
+            var planeGeometry = new THREE.PlaneGeometry(500, 500, 10, 10);
+            var planeMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+            });
+            plane = new THREE.Mesh(planeGeometry, planeMaterial);
+            plane.rotation.x = -Math.PI / 2;
+            // scene.add(plane);
 
             camera.position.z = 50;
             camera.position.y = 40;
@@ -80,13 +92,25 @@ export default {
 
             controls.screenSpacePanning = false;
 
-            controls.minDistance = 100;
+            controls.minDistance = 1;
             controls.maxDistance = 500;
 
             controls.maxPolarAngle = Math.PI / 2;
         },
+        addText(){
+            myText =new Text();
+            scene.add(myText)
+
+            myText.text='浙AAG3857'
+            myText.fontSize =0.2;
+            myText.color = 0xffffff;
+            myText.position.y=2;
+            myText.font='./NotoSansSC-Regular.otf'
+
+        },
         animate() {
             renderer.render(scene, camera)
+            myText.sync()
             requestAnimationFrame(this.animate)
         },
         addOutline(object) {

@@ -27,3 +27,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 1.声明场景环境
 2.添加了一个ShaderMaterial
 3.其他的包含了一些glsl函数的学习
+
+### 第二次提交
+1.增加了文字的一个显示方式
