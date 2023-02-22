@@ -1,29 +1,13 @@
 <template>
   <div id="app">
-    Hello
+    <nav>
+      <router-link to="/">HOME</router-link> |
+      <router-link to="/SDF">SDFDemo</router-link> |
+      <router-link to="/about">About</router-link>
+    </nav>
+    <router-view/>
   </div>
 </template>
-
-<script>
-import Worker from './my.worker.js';
-
-export default {
-  name: 'App',
-  components: {
-  },
-  created(){
-    const wk =new Worker();
-    wk.postMessage({
-      type:'start_worker',
-      msg:'hi'
-    })
-
-    wk.onmessage=(e)=>{
-      console.log(e.data)
-    }
-  }
-}
-</script>
 
 <style>
 #app {
@@ -32,6 +16,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+nav {
+  padding: 5px;
+}
+
+nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>
